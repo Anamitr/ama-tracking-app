@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ama-tracking-app</string>
+    <string name="get_config_button">GET CONFIGURATION</string>
+    <string name="enter_id_hint">Enter id</string>
+    <string name="geofence">Geofence</string>
+    <string name="config_name">Config name</string>
+    <string name="stop">Stop</string>
+    <string name="change_configuration">CHANGE CONFIGURATION</string>
+    <string name="clear_logs">CLEAR LOGS</string>
+
+</resources>
