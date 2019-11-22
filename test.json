@@ -1,0 +1,64 @@
+{
+  "_ref": {
+    "_firestore": {
+      "_settings": {
+        "projectId": "ama-tracking-app",
+        "firebaseVersion": "8.8.0",
+        "libName": "gccl",
+        "libVersion": "2.6.0 fire/8.8.0"
+      },
+      "_settingsFrozen": true,
+      "_serializer": {
+        "timestampsInSnapshots": true
+      },
+      "_projectId": "ama-tracking-app",
+      "_lastSuccessfulRequest": 1574354838006,
+      "_preferTransactions": true,
+      "_clientPool": {
+        "concurrentOperationLimit": 100,
+        "activeClients": {}
+      }
+    },
+    "_path": {
+      "segments": [
+        "configurations",
+        "223344"
+      ],
+      "projectId": "ama-tracking-app",
+      "databaseId": "(default)"
+    }
+  },
+  "_fieldsProto": {
+    "trackedObjectId": {
+      "stringValue": "232a834e-a8a5-67cb-aee4-015bed6a5442",
+      "valueType": "stringValue"
+    },
+    "positionIntervalInMinutes": {
+      "integerValue": "11",
+      "valueType": "integerValue"
+    },
+    "name": {
+      "stringValue": "Test 1",
+      "valueType": "stringValue"
+    },
+    "token": {
+      "stringValue": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9. Ww7TXlTYWZldHkifQ.6VDCmHZ_jGYhfpB8G1FBsVaFMKlIwCwH-HzhCyE5bUU",
+      "valueType": "stringValue"
+    }
+  },
+  "_serializer": {
+    "timestampsInSnapshots": true
+  },
+  "_readTime": {
+    "_seconds": 1574354837,
+    "_nanoseconds": 935829000
+  },
+  "_createTime": {
+    "_seconds": 1574344892,
+    "_nanoseconds": 80617000
+  },
+  "_updateTime": {
+    "_seconds": 1574344892,
+    "_nanoseconds": 80617000
+  }
+}
