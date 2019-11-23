@@ -12,6 +12,10 @@ fun Context.GeofenceLogIntent(id: String): Intent {
     }
 }
 
+fun Context.GeofenceLogIntent(): Intent {
+    return Intent(this, GeofenceLogActivity::class.java)
+}
+
 private const val INTENT_ID = "id";
 
 class GeofenceLogActivity : AppCompatActivity() {
@@ -20,7 +24,7 @@ class GeofenceLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_geofence_log)
 
-        val id = intent.getStringExtra(INTENT_ID)
-        Toast.makeText(this, "Id: $id", Toast.LENGTH_SHORT).show()
+//        val id = intent.getStringExtra(INTENT_ID)
+//        Toast.makeText(this, "Id: $id", Toast.LENGTH_SHORT).show()
     }
 }

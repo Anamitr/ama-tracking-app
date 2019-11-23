@@ -10,7 +10,7 @@
 
 
     <EditText
-        android:id="@+id/idEditText"
+        android:id="@+id/configIdEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -29,9 +29,9 @@
         android:layout_marginTop="16dp"
         android:text="@string/get_config_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/idEditText"
-        app:layout_constraintRight_toRightOf="@id/idEditText"
-        app:layout_constraintTop_toBottomOf="@id/idEditText" />
+        app:layout_constraintLeft_toLeftOf="@id/configIdEditText"
+        app:layout_constraintRight_toRightOf="@id/configIdEditText"
+        app:layout_constraintTop_toBottomOf="@id/configIdEditText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
