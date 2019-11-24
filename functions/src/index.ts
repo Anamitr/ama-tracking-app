@@ -6,8 +6,9 @@ import * as functions from 'firebase-functions';
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-function createNewConfig(configRef: any) {
+function createNewConfig(configRef: any, configId:String) {
     let defaultConfigData = {
+        "id" : configId,
         "name": "Test",
         "token": "",
         "trackedObjectId": "",
@@ -23,7 +24,7 @@ exports.getConfig = functions.https.onRequest((request, response) => {
     let configRef = db.collection("configurations").doc(configId);
     let getConfig = configRef.get().then((doc: any) => {
         if (!doc.exists) {
-            let newConfigData = createNewConfig(configRef);
+            let newConfigData = createNewConfig(configRef, configId);
             response.status(201).send(newConfigData)
         } else {
             console.log('Document data:', doc.data());
