@@ -1,25 +1,38 @@
-package com.example.ama_tracking_app
+package com.example.ama_tracking_app.viewmodel
 
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.ama_tracking_app.db.DatabaseProvider
+import com.example.ama_tracking_app.db.GeoConfigurationDao
 import com.example.ama_tracking_app.model.GeoConfiguration
 import com.example.ama_tracking_app.service.FirebaseService
 import com.example.ama_tracking_app.service.RetrofitServiceProvider
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-class ConfigViewModel(application: Application) : AndroidViewModel(application) {
+//TODO: Is AndroidViewModel ok or should I avoid using Context in ViewModel?
+class ConfigViewModel(application: Application, configId: String? = null) :
+    AndroidViewModel(application) {
     companion object {
         private val TAG = ConfigViewModel::class.qualifiedName
     }
 
     var geoConfiguration: GeoConfiguration = GeoConfiguration()
     val firebaseService: FirebaseService = RetrofitServiceProvider.getFirebaseService()
+    val geoConfigurationDao: GeoConfigurationDao =
+        DatabaseProvider.getDatabase(getApplication()).geoConfigurationDao()
+
+    init {
+        configId?.let {
+            loadGeoConfigationFromDb(it)
+        }
+    }
 
     //TODO: Probably a total heresy to do it here
     fun loadConfig(configId: String) {
@@ -42,6 +55,7 @@ class ConfigViewModel(application: Application) : AndroidViewModel(application) 
                     var newGeoConfiguration = response.body()
                     if (newGeoConfiguration != null) {
                         geoConfiguration = newGeoConfiguration
+                        upsertGeoConfiguration(geoConfiguration)
                         EventBus.getDefault().post(ConfigLoadedEvent())
                     } else {
                         response.raw().request().url()
@@ -58,6 +72,19 @@ class ConfigViewModel(application: Application) : AndroidViewModel(application) 
                 }
             }
         })
+    }
+
+    fun upsertGeoConfiguration(geoConfiguration: GeoConfiguration) = viewModelScope.launch {
+        geoConfigurationDao.upsert(geoConfiguration)
+    }
+
+    fun loadGeoConfigationFromDb(configId: String) = viewModelScope.launch {
+        geoConfigurationDao.loadById(configId)?.let {
+            geoConfiguration = it
+            Log.v(TAG, "Loaded config: $it")
+        } ?: run {
+            Log.e(TAG, "Config with id $configId not found")
+        }
     }
 
     class ConfigLoadedEvent
