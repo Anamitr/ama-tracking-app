@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "825299700350",
+    "firebase_url": "https://ama-tracking-app.firebaseio.com",
+    "project_id": "ama-tracking-app",
+    "storage_bucket": "ama-tracking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825299700350:android:44180350327706340aa62f",
+        "android_client_info": {
+          "package_name": "com.example.ama_tracking_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825299700350-gfaocucldfkkmcparg4tqcj271aa9mpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQQgVtOjZdV7AmEM2IrOHIka6EgfIpVRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825299700350-gfaocucldfkkmcparg4tqcj271aa9mpt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
