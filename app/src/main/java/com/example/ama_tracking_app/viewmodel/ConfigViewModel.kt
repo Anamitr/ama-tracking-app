@@ -16,7 +16,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+//TODO: Move reading from db and comunication with internet to another class so that different
+// view models could use same methods
+
+//TODO: Everything below view model should be in seperate module
+
 //TODO: Is AndroidViewModel ok or should I avoid using Context in ViewModel?
+//It's ok but you can also use interfaces instead of having context in ViewModel
 class ConfigViewModel(application: Application, configId: String? = null) :
     AndroidViewModel(application) {
     companion object {
@@ -35,6 +41,7 @@ class ConfigViewModel(application: Application, configId: String? = null) :
     }
 
     //TODO: Probably a total heresy to do it here
+    // Move to another class
     fun loadConfig(configId: String) {
         val geoConfigurationCall: Call<GeoConfiguration> = firebaseService.getConfig(configId)
         geoConfigurationCall.enqueue(object : Callback<GeoConfiguration> {

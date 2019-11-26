@@ -29,6 +29,7 @@ class GetConfigActivity : AppCompatActivity() {
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?
+    // Interfaces, don't use EventBus
     @Subscribe
     fun onMessageEvent(event: ConfigViewModel.ConfigLoadedEvent?) {
         Toast.makeText(this, "Config loaded!", Toast.LENGTH_SHORT).show()

@@ -34,6 +34,8 @@ class GeofenceLogActivity : AppCompatActivity() {
         Toast.makeText(this, "Id: $id", Toast.LENGTH_SHORT).show()
 
         viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application, id)).get(ConfigViewModel::class.java)
+
+        //TODO: DataBinding
         configNameTextView.text = viewModel.geoConfiguration.name
     }
 }
