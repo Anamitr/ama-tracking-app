@@ -62,7 +62,7 @@ class ConfigViewModel(application: Application, configId: String? = null) :
                     var newGeoConfiguration = response.body()
                     if (newGeoConfiguration != null) {
                         geoConfiguration = newGeoConfiguration
-                        upsertGeoConfiguration(geoConfiguration)
+                        insertGeoConfiguration(geoConfiguration)
                         EventBus.getDefault().post(ConfigLoadedEvent())
                     } else {
                         response.raw().request().url()
@@ -81,8 +81,8 @@ class ConfigViewModel(application: Application, configId: String? = null) :
         })
     }
 
-    fun upsertGeoConfiguration(geoConfiguration: GeoConfiguration) = viewModelScope.launch {
-        geoConfigurationDao.upsert(geoConfiguration)
+    fun insertGeoConfiguration(geoConfiguration: GeoConfiguration) = viewModelScope.launch {
+        geoConfigurationDao.insert(geoConfiguration)
     }
 
     fun loadGeoConfigationFromDb(configId: String) = viewModelScope.launch {
