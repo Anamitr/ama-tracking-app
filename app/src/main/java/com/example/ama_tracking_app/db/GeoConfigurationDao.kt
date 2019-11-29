@@ -1,5 +1,7 @@
 package com.example.ama_tracking_app.db
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.ama_tracking_app.model.GeoConfiguration
 
@@ -8,5 +10,5 @@ import com.example.ama_tracking_app.model.GeoConfiguration
 @Dao
 abstract class GeoConfigurationDao : BaseDao<GeoConfiguration>() {
     @Query("SELECT * FROM geoconfiguration WHERE id LIKE :configId")
-    abstract suspend fun loadById(configId: String): GeoConfiguration?
+    abstract fun loadById(configId: String): LiveData<GeoConfiguration>
 }

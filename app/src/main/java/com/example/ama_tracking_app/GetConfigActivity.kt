@@ -2,10 +2,10 @@ package com.example.ama_tracking_app
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
-import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 //import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
@@ -17,13 +17,15 @@ class GetConfigActivity : AppCompatActivity() {
         private val TAG = GetConfigActivity::class.qualifiedName
     }
 
-    private lateinit var viewModel: ConfigViewModel
+    private val viewModel: ConfigViewModel by viewModels {
+        InjectorUtils.provideConfigViewModelFactory(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application)).get(ConfigViewModel::class.java)
-        getConfigButton.setOnClickListener { viewModel.loadConfig(configIdEditText.text.toString()) }
+//        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application)).get(ConfigViewModel::class.java)
+        getConfigButton.setOnClickListener { viewModel.loadConfigFromFirebase(configIdEditText.text.toString()) }
 
         setTestConfigId()
     }
@@ -31,9 +33,10 @@ class GetConfigActivity : AppCompatActivity() {
     //TODO: In MVVM should I start activity from activity or ViewModel?
     // Interfaces, don't use EventBus
     @Subscribe
-    fun onMessageEvent(event: ConfigViewModel.ConfigLoadedEvent?) {
-        Toast.makeText(this, "Config loaded!", Toast.LENGTH_SHORT).show()
-        startActivity(GeofenceLogIntent(viewModel.geoConfiguration.id))
+    fun onMessageEvent(event: ConfigLoadedToViewModelEvent) {
+//        Toast.makeText(this, "Config loaded!", Toast.LENGTH_SHORT).show()
+        val configId = viewModel.geoConfiguration.id
+        configId?.let { startActivity(GeofenceLogIntent(configId)) }
     }
 
     override fun onStart() {

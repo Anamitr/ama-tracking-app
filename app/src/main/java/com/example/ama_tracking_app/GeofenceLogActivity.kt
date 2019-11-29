@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
 import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import kotlinx.android.synthetic.main.activity_geofence_log.*
@@ -33,9 +34,9 @@ class GeofenceLogActivity : AppCompatActivity() {
         val id = intent.getStringExtra(INTENT_ID)
         Toast.makeText(this, "Id: $id", Toast.LENGTH_SHORT).show()
 
-        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application, id)).get(ConfigViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(InjectorUtils.getConfigRepository(this), id)).get(ConfigViewModel::class.java)
 
         //TODO: DataBinding
-        configNameTextView.text = viewModel.geoConfiguration.name
+//        configNameTextView.text = viewModel.geoConfiguration.name
     }
 }
