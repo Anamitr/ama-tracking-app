@@ -1,4 +1,4 @@
-package com.example.ama_tracking_app
+package com.example.ama_tracking_app.util
 
 import android.widget.Toast
 import com.example.ama_tracking_app.model.GeoConfiguration

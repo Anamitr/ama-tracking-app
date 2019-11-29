@@ -2,8 +2,8 @@ package com.example.ama_tracking_app.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.ama_tracking_app.ConfigLoadedToDbEvent
-import com.example.ama_tracking_app.ToastEvent
+import com.example.ama_tracking_app.util.ConfigLoadedToDbEvent
+import com.example.ama_tracking_app.util.ToastEvent
 import com.example.ama_tracking_app.db.GeoConfigurationDao
 import com.example.ama_tracking_app.model.GeoConfiguration
 import com.example.ama_tracking_app.service.FirebaseService
@@ -37,7 +37,11 @@ class ConfigRepository private constructor(
         geoConfigurationCall.enqueue(object : Callback<GeoConfiguration> {
             override fun onFailure(call: Call<GeoConfiguration>, t: Throwable) {
                 Log.e(TAG, "getConfig call failure " + t.localizedMessage)
-                EventBus.getDefault().post(ToastEvent("Failed to get config from firebase!"))
+                EventBus.getDefault().post(
+                    ToastEvent(
+                        "Failed to get config from firebase!"
+                    )
+                )
             }
 
             override fun onResponse(
@@ -47,15 +51,27 @@ class ConfigRepository private constructor(
                 if (response.isSuccessful) {
                     var newGeoConfiguration = response.body()
                     if (newGeoConfiguration != null) {
-                        EventBus.getDefault().post(ToastEvent("Config loaded! id: " + newGeoConfiguration.id))
-                        EventBus.getDefault().post(ConfigLoadedToDbEvent(newGeoConfiguration))
+                        EventBus.getDefault().post(
+                            ToastEvent(
+                                "Config loaded! id: " + newGeoConfiguration.id
+                            )
+                        )
+                        EventBus.getDefault().post(
+                            ConfigLoadedToDbEvent(
+                                newGeoConfiguration
+                            )
+                        )
                     } else {
                         response.raw().request().url()
                         Log.e(
                             TAG,
                             "Call at url " + response.raw().request().url() + " returned null"
                         )
-                        EventBus.getDefault().post(ToastEvent("/getConfig returned null"))
+                        EventBus.getDefault().post(
+                            ToastEvent(
+                                "/getConfig returned null"
+                            )
+                        )
                     }
                 }
             }

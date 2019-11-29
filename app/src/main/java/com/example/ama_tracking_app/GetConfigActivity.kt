@@ -4,6 +4,8 @@ package com.example.ama_tracking_app
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ama_tracking_app.base.BaseActivity
+import com.example.ama_tracking_app.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -11,7 +13,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 
-class GetConfigActivity : AppCompatActivity() {
+class GetConfigActivity : BaseActivity() {
     companion object {
         private val TAG = GetConfigActivity::class.qualifiedName
     }
@@ -45,6 +47,11 @@ class GetConfigActivity : AppCompatActivity() {
         configId?.let { startActivity(GeofenceLogIntent(configId)) }
     }
 
+
+    fun setTestConfigId() {
+        configIdEditText.setText("22")
+    }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -55,7 +62,4 @@ class GetConfigActivity : AppCompatActivity() {
         EventBus.getDefault().unregister(this)
     }
 
-    fun setTestConfigId() {
-        configIdEditText.setText("22")
-    }
 }

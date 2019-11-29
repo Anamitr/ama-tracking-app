@@ -1,8 +1,8 @@
 package com.example.ama_tracking_app.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.ama_tracking_app.ConfigLoadedToDbEvent
-import com.example.ama_tracking_app.ConfigLoadedToViewModelEvent
+import com.example.ama_tracking_app.util.ConfigLoadedToDbEvent
+import com.example.ama_tracking_app.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.model.GeoConfiguration
 import com.example.ama_tracking_app.repository.ConfigRepository
 import org.greenrobot.eventbus.EventBus
