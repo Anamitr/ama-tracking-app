@@ -1,6 +1,5 @@
 package com.example.ama_tracking_app.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

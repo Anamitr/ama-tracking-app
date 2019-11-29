@@ -2,7 +2,6 @@ package com.example.ama_tracking_app.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.ama_tracking_app.ConfigLoadedToDbEvent
 import com.example.ama_tracking_app.ToastEvent
 import com.example.ama_tracking_app.db.GeoConfigurationDao

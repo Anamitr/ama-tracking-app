@@ -2,14 +2,13 @@ package com.example.ama_tracking_app
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
 import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
-import kotlinx.android.synthetic.main.activity_geofence_log.*
 
 fun Context.GeofenceLogIntent(id: String): Intent {
     return Intent(this, GeofenceLogActivity::class.java).apply {

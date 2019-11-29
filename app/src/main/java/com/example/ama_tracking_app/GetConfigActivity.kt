@@ -1,12 +1,11 @@
 package com.example.ama_tracking_app
 
+//import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
-//import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
