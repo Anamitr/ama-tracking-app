@@ -31,7 +31,14 @@ class GetConfigActivity : AppCompatActivity() {
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?
-    // Interfaces, don't use EventBus
+    // - It depends, but I think it is better when there is no direct use of Context in ViewModel
+
+    //TODO: Interfaces, don't use EventBus
+    // As described here: https://medium.com/@erik_90880/sending-events-from-an-mvvm-view-model-with-kotlin-19fdce61dcb9
+    // Interfaces are bad because we don't know if objects behind them are alive
+    // Events are said to be not understandable.
+    // Proposition is to use SingleLiveEvent, that is supposed to combine pros of both solutions and eliminate their cons
+    // Nevertheless SingleLiveEvent isn't official solution, so it may be not the best idea getting used to it
     @Subscribe
     fun onMessageEvent(event: ConfigLoadedToViewModelEvent) {
 //        Toast.makeText(this, "Config loaded!", Toast.LENGTH_SHORT).show()

@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitServiceProvider {
     private const val base_url: String = "https://us-central1-ama-tracking-app.cloudfunctions.net/"
     //TODO: How to init this? lateinit var or val and init right after declaration
-    // Use dagger
+    // Could use dagger but not really that much sense in such a small project
     private val firebaseService: FirebaseService
 
     init {

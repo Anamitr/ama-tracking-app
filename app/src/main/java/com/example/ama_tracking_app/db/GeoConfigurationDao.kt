@@ -1,12 +1,12 @@
 package com.example.ama_tracking_app.db
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
 import com.example.ama_tracking_app.model.GeoConfiguration
 
 //TODO: Should I write everywhere "suspend" to prevent executing on main thread?
-// If you want to use coroutines then yes
+// Not necessarily, removed it from function loadById taking example from Google Sunflower app
 @Dao
 abstract class GeoConfigurationDao : BaseDao<GeoConfiguration>() {
     @Query("SELECT * FROM geoconfiguration WHERE id LIKE :configId")

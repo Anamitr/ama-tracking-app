@@ -11,14 +11,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
-//TODO: Move reading from db and comunication with internet to another class so that different
-// view models could use same methods
-
-//TODO: Everything below view model should be in seperate module
-
-//TODO: Is AndroidViewModel ok or should I avoid using Context in ViewModel?
-//It's ok but you can also use interfaces instead of having context in ViewModel
 class ConfigViewModel(
     private val configRepository: ConfigRepository,
     private val initialConfigId: String?
