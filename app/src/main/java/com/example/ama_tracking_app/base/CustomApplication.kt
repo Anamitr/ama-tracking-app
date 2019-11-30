@@ -2,7 +2,7 @@ package com.example.ama_tracking_app.base
 
 import android.app.Application
 import android.widget.Toast
-import com.example.ama_tracking_app.util.ToastEvent
+import com.example.geofence.util.ToastEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 

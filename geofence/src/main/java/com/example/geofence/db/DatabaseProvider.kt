@@ -1,4 +1,4 @@
-package com.example.ama_tracking_app.db
+package com.example.geofence.db
 
 import android.content.Context
 import androidx.room.Room

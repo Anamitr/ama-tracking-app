@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -50,20 +47,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$viewmodel_savedstate_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+//    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+//    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-//    implementation "androidx.room:room-coroutines:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+//    implementation "androidx.room:room-runtime:$room_version"
+//    kapt "androidx.room:room-compiler:$room_version"
+//    implementation "androidx.room:room-ktx:$room_version"
+////    implementation "androidx.room:room-coroutines:$room_version"
+//    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     implementation "androidx.activity:activity-ktx:$activity_version"
+
+    implementation project(':geofence')
 }
 
 apply plugin: 'com.google.gms.google-services'

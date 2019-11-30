@@ -3,9 +3,8 @@ package com.example.ama_tracking_app
 //import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.example.ama_tracking_app.base.BaseActivity
-import com.example.ama_tracking_app.util.ConfigLoadedToViewModelEvent
+import com.example.geofence.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
 import kotlinx.android.synthetic.main.activity_main.*

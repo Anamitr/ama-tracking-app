@@ -1,4 +1,4 @@
-package com.example.ama_tracking_app.service
+package com.example.geofence.service
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

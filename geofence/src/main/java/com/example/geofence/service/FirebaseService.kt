@@ -1,6 +1,6 @@
-package com.example.ama_tracking_app.service
+package com.example.geofence.service
 
-import com.example.ama_tracking_app.model.GeoConfiguration
+import com.example.geofence.model.GeoConfiguration
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

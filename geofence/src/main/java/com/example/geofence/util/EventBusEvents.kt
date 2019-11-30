@@ -1,7 +1,7 @@
-package com.example.ama_tracking_app.util
+package com.example.geofence.util
 
 import android.widget.Toast
-import com.example.ama_tracking_app.model.GeoConfiguration
+import com.example.geofence.model.GeoConfiguration
 
 data class ToastEvent(val message: String, val toastLength : Int = Toast.LENGTH_SHORT)
 

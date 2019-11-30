@@ -1,13 +1,13 @@
-package com.example.ama_tracking_app.db
+package com.example.geofence.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.ama_tracking_app.model.GeoConfiguration
 import com.example.ama_tracking_app.util.DATABASE_NAME
+import com.example.geofence.model.GeoConfiguration
 
-@Database(entities = arrayOf(GeoConfiguration::class), version = 1)
+@Database(entities = arrayOf(GeoConfiguration::class), version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun geoConfigurationDao(): GeoConfigurationDao
 
@@ -19,7 +19,10 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
+                instance
+                    ?: buildDatabase(
+                        context
+                    ).also { instance = it }
             }
         }
 

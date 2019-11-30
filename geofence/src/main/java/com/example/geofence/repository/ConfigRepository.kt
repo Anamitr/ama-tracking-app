@@ -1,13 +1,13 @@
-package com.example.ama_tracking_app.repository
+package com.example.geofence.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.ama_tracking_app.util.ConfigLoadedToDbEvent
-import com.example.ama_tracking_app.util.ToastEvent
-import com.example.ama_tracking_app.db.GeoConfigurationDao
-import com.example.ama_tracking_app.model.GeoConfiguration
-import com.example.ama_tracking_app.service.FirebaseService
-import com.example.ama_tracking_app.service.RetrofitServiceProvider
+import com.example.geofence.db.GeoConfigurationDao
+import com.example.geofence.model.GeoConfiguration
+import com.example.geofence.service.FirebaseService
+import com.example.geofence.service.RetrofitServiceProvider
+import com.example.geofence.util.ConfigLoadedToDbEvent
+import com.example.geofence.util.ToastEvent
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,7 +84,7 @@ class ConfigRepository private constructor(
         // For Singleton instantiation
         @Volatile private var instance: ConfigRepository? = null
 
-        fun getInstance(geoConfigurationDao : GeoConfigurationDao) =
+        fun getInstance(geoConfigurationDao : com.example.geofence.db.GeoConfigurationDao) =
             instance ?: synchronized(this) {
                 instance ?: ConfigRepository(geoConfigurationDao, RetrofitServiceProvider.getFirebaseService()).also { instance = it }
             }

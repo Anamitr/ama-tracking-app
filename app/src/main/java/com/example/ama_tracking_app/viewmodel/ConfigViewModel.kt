@@ -1,12 +1,12 @@
 package com.example.ama_tracking_app.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.ama_tracking_app.util.ConfigLoadedToDbEvent
-import com.example.ama_tracking_app.util.ConfigLoadedToViewModelEvent
-import com.example.ama_tracking_app.model.GeoConfiguration
-import com.example.ama_tracking_app.repository.ConfigRepository
+import com.example.geofence.util.ConfigLoadedToDbEvent
+import com.example.geofence.util.ConfigLoadedToViewModelEvent
+import com.example.geofence.repository.ConfigRepository
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import com.example.geofence.model.GeoConfiguration
 
 class ConfigViewModel(
     private val configRepository: ConfigRepository,

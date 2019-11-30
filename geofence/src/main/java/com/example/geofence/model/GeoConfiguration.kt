@@ -1,4 +1,4 @@
-package com.example.ama_tracking_app.model
+package com.example.geofence.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
