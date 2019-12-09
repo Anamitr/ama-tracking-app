@@ -27,6 +27,7 @@ class GeofenceForegroundService : Service() {
         val notification : Notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Geofence Foreground Service")
             .setContentText("Geofence")
+            .setSmallIcon(R.drawable.gps_logo_small_icon)
             .build()
 
         startForeground(1, notification)
