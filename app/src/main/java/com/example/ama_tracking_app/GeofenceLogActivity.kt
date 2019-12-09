@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
+import com.example.geofence.GeofenceController
 
 fun Context.GeofenceLogIntent(id: String): Intent {
     return Intent(this, GeofenceLogActivity::class.java).apply {
@@ -35,5 +36,7 @@ class GeofenceLogActivity : BaseActivity() {
 
         //TODO: DataBinding
 //        configNameTextView.text = viewModel.geoConfiguration.name
+
+        GeofenceController.startGeofenceService(this)
     }
 }

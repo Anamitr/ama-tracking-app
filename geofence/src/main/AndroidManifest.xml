@@ -1,2 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.geofence" />
+    package="com.example.geofence">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application>
+        <service
+            android:name="com.example.geofence.GeofenceForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+
+
+</manifest>
