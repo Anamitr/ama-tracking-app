@@ -20,6 +20,8 @@ class GeofenceForegroundService : Service() {
         private val TAG = GeofenceForegroundService::class.qualifiedName
         const val CHANNEL_ID = "GeofenceForegroundService"
         const val INTERVAL_IN_MINUTES_EXTRA_ID = "INTERVAL_IN_MINUTES_EXTRA_ID"
+        const val START_FOREGROUND_ACTION = "START_FOREGROUND_ACTION"
+        const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND_ACTION"
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -32,43 +34,47 @@ class GeofenceForegroundService : Service() {
     private var mLocation: Location? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Toast.makeText(this, "Service starting", Toast.LENGTH_SHORT).show()
+        if (intent?.action.equals(START_FOREGROUND_ACTION)) {
+            Toast.makeText(this, "Service starting", Toast.LENGTH_SHORT).show()
+            val intervalInMinutes = intent?.getIntExtra(INTERVAL_IN_MINUTES_EXTRA_ID, 15)
 
-        val intervalInMinutes = intent?.getIntExtra(INTERVAL_IN_MINUTES_EXTRA_ID, 15)
+            Log.i(
+                TAG,
+                "GeofenceForegroundService starting with interval in minutes = $intervalInMinutes"
+            )
 
-        Log.i(TAG, "GeofenceForegroundService starting with interval in minutes = $intervalInMinutes")
-
-        intervalInMinutes?.let {
-            updateIntervalInMilliseconds =  intervalInMinutes * 60L * 1000L
-        } ?: run{
-            Log.e(TAG, "Didn't received intervalInMinutes, set default value")
-        }
-
-        createNotificationChannel()
-
-        //TODO: content not showing on notification
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Geofence Foreground Service")
-            .setContentText("Geofence")
-            .setSmallIcon(R.drawable.gps_logo_small_icon)
-            .build()
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                onNewLocation(locationResult.lastLocation)
+            intervalInMinutes?.let {
+                updateIntervalInMilliseconds = intervalInMinutes * 60L * 1000L
+            } ?: run {
+                Log.e(TAG, "Didn't received intervalInMinutes, set default value")
             }
+
+            createNotificationChannel()
+
+            //TODO: content not showing on notification
+            val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Geofence Foreground Service")
+                .setContentText("Geofence")
+                .setSmallIcon(R.drawable.gps_logo_small_icon)
+                .build()
+
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            mLocationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    onNewLocation(locationResult.lastLocation)
+                }
+            }
+
+            createLocationRequest()
+            getLastLocation()
+
+            startForeground(1, notification)
+            requestLocationUpdates()
+        } else if (intent?.action.equals(STOP_FOREGROUND_ACTION)) {
+            stopForeground(true)
+            stopSelf()
         }
-
-        createLocationRequest()
-        getLastLocation()
-
-
-
-
-        startForeground(1, notification)
-        requestLocationUpdates()
 
         return START_STICKY
     }

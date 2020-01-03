@@ -3,6 +3,7 @@ package com.example.ama_tracking_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.ama_tracking_app.util.InjectorUtils
@@ -59,9 +60,14 @@ class GeoLogActivity : BaseActivity() {
         GeofenceController.startGeofenceService()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Toast.makeText(applicationContext, "Stopping foreground service", Toast.LENGTH_SHORT).show()
+        GeofenceController.stopGeofenceService()
+    }
+
     override fun onStart() {
         super.onStart()
-
     }
 
     override fun onStop() {
