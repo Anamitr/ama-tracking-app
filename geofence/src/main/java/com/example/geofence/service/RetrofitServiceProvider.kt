@@ -1,7 +1,9 @@
 package com.example.geofence.service
 
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 object RetrofitServiceProvider {
     private const val base_url: String = "https://us-central1-ama-tracking-app.cloudfunctions.net/"
@@ -10,8 +12,12 @@ object RetrofitServiceProvider {
     private val firebaseService: FirebaseService
 
     init {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
         val retrofit: Retrofit =
-            Retrofit.Builder().baseUrl(base_url).addConverterFactory(GsonConverterFactory.create())
+            Retrofit.Builder().baseUrl(base_url).addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         firebaseService = retrofit.create(FirebaseService::class.java)
     }

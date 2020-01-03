@@ -2,6 +2,7 @@ package com.example.ama_tracking_app
 
 //import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.geofence.util.ConfigLoadedToViewModelEvent
@@ -28,6 +29,11 @@ class GetConfigActivity : BaseActivity() {
         getConfigButton.setOnClickListener { viewModel.loadConfigFromFirebase(configIdEditText.text.toString()) }
 
         setTestConfigId()
+    }
+
+    fun testSth(view : View) {
+        val manualTester = ManualTester()
+        manualTester.sendLog("hejo")
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?

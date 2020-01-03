@@ -33,5 +33,14 @@
         app:layout_constraintRight_toRightOf="@id/configIdEditText"
         app:layout_constraintTop_toBottomOf="@id/configIdEditText" />
 
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test button"
+        app:layout_constraintTop_toBottomOf="@id/getConfigButton"
+        android:layout_marginTop="20dp"
+        android:onClick="testSth"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,9 @@
 package com.example.geofence.service
 
 import com.example.geofence.model.GeoConfiguration
+import com.example.geofence.model.GeoLog
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface FirebaseService {
     @GET("getConfig")
@@ -13,4 +11,10 @@ interface FirebaseService {
 
     @PUT("updateConfig")
     fun updateConfig(@Query("id") configId: String, @Body geoConfiguration: GeoConfiguration): Call<String>
+
+    @POST("postLog")
+    fun postLog(@Query("id") configId: String, @Body geoLog: GeoLog): Call<String>
+
+    @GET("getNextLogId")
+    fun getNextLogId(@Query("id") configId: String) : Call<String>
 }
