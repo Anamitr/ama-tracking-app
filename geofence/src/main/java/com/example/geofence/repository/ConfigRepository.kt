@@ -8,6 +8,8 @@ import com.example.geofence.service.FirebaseService
 import com.example.geofence.service.RetrofitServiceProvider
 import com.example.geofence.util.ConfigLoadedToDbEvent
 import com.example.geofence.util.ToastEvent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,18 +23,18 @@ class ConfigRepository private constructor(
         geoConfigurationDao.insert(geoConfiguration)
     }
 
-    fun loadGeoConfigurationFromDb(configId: String) : LiveData<GeoConfiguration> {
-        geoConfigurationDao.loadById(configId)?.let {
-            Log.v(TAG, "Loaded config: $it")
-            return it
-        }
-//            ?: run {
-//            Log.e(TAG, "Config with id $configId not found")
-//            return null
+    fun loadGeoConfigurationFromDb(configId: String): GeoConfiguration {
+//        GlobalScope.launch {
+//            geoConfigurationDao.loadById(configId)?.let {
+//                Log.v(TAG, "Loaded config: ${it}")
+//                return it
+//            }
 //        }
+        return geoConfigurationDao.loadById(configId)
     }
 
     fun loadConfigFromFirebase(configId: String) {
+//        GlobalScope.launch {
         val geoConfigurationCall: Call<GeoConfiguration> = firebaseService.getConfig(configId)
         geoConfigurationCall.enqueue(object : Callback<GeoConfiguration> {
             override fun onFailure(call: Call<GeoConfiguration>, t: Throwable) {
@@ -56,11 +58,15 @@ class ConfigRepository private constructor(
                                 "Config loaded! id: " + newGeoConfiguration.id
                             )
                         )
-                        EventBus.getDefault().post(
-                            ConfigLoadedToDbEvent(
-                                newGeoConfiguration
+                        GlobalScope.launch {
+                            geoConfigurationDao.insert(newGeoConfiguration)
+                            EventBus.getDefault().post(
+                                ConfigLoadedToDbEvent(
+                                    newGeoConfiguration
+                                )
                             )
-                        )
+
+                        }
                     } else {
                         response.raw().request().url()
                         Log.e(
@@ -76,17 +82,22 @@ class ConfigRepository private constructor(
                 }
             }
         })
+//        }
     }
 
     companion object {
         private val TAG = ConfigRepository::class.java.simpleName
 
         // For Singleton instantiation
-        @Volatile private var instance: ConfigRepository? = null
+        @Volatile
+        private var instance: ConfigRepository? = null
 
-        fun getInstance(geoConfigurationDao : com.example.geofence.db.GeoConfigurationDao) =
+        fun getInstance(geoConfigurationDao: GeoConfigurationDao) =
             instance ?: synchronized(this) {
-                instance ?: ConfigRepository(geoConfigurationDao, RetrofitServiceProvider.getFirebaseService()).also { instance = it }
+                instance ?: ConfigRepository(
+                    geoConfigurationDao,
+                    RetrofitServiceProvider.getFirebaseService()
+                ).also { instance = it }
             }
     }
 }

@@ -21,7 +21,7 @@ abstract class BaseDao<T> {
      * @return The SQLite row ids
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(obj: List<T>?): List<Long>
+    abstract fun insert(obj: List<T>?): List<Long>
 
     /**
      * Update an object from the database.
@@ -29,7 +29,7 @@ abstract class BaseDao<T> {
      * @param obj the object to be updated
      */
     @Update
-    abstract suspend fun update(obj: T)
+    abstract fun update(obj: T)
 
     /**
      * Update an array of objects from the database.
@@ -37,7 +37,7 @@ abstract class BaseDao<T> {
      * @param obj the object to be updated
      */
     @Update
-    abstract suspend fun update(obj: List<T>?)
+    abstract fun update(obj: List<T>?)
 
     /**
      * Delete an object from the database
@@ -45,7 +45,7 @@ abstract class BaseDao<T> {
      * @param obj the object to be deleted
      */
     @Delete
-    abstract suspend fun delete(obj: T)
+    abstract fun delete(obj: T)
 
     @Transaction
     open suspend fun upsert(obj: T) {
@@ -54,4 +54,5 @@ abstract class BaseDao<T> {
             update(obj)
         }
     }
+
 }

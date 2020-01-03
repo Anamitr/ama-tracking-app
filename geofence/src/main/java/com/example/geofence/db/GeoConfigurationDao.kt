@@ -10,5 +10,9 @@ import com.example.geofence.model.GeoConfiguration
 @Dao
 abstract class GeoConfigurationDao : BaseDao<GeoConfiguration>() {
     @Query("SELECT * FROM geoconfiguration WHERE id LIKE :configId")
-    abstract fun loadById(configId: String): LiveData<GeoConfiguration>
+    abstract fun loadById(configId: String): GeoConfiguration
+
+    @Query("SELECT * FROM geoconfiguration")
+    abstract fun loadAll() : List<GeoConfiguration>
+
 }

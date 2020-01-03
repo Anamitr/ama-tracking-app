@@ -19,6 +19,7 @@ class GeofenceForegroundService : Service() {
     companion object {
         private val TAG = GeofenceForegroundService::class.qualifiedName
         const val CHANNEL_ID = "GeofenceForegroundService"
+        const val INTERVAL_IN_MINUTES_EXTRA_ID = "INTERVAL_IN_MINUTES_EXTRA_ID"
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -32,7 +33,16 @@ class GeofenceForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Toast.makeText(this, "Service starting", Toast.LENGTH_SHORT).show()
-        Log.i(TAG, "GeofenceForegroundService starting")
+
+        val intervalInMinutes = intent?.getIntExtra(INTERVAL_IN_MINUTES_EXTRA_ID, 15)
+
+        Log.i(TAG, "GeofenceForegroundService starting with interval in minutes = $intervalInMinutes")
+
+        intervalInMinutes?.let {
+            updateIntervalInMilliseconds =  intervalInMinutes * 60L * 1000L
+        } ?: run{
+            Log.e(TAG, "Didn't received intervalInMinutes, set default value")
+        }
 
         createNotificationChannel()
 
@@ -109,7 +119,7 @@ class GeofenceForegroundService : Service() {
     private fun createLocationRequest() {
         mLocationRequest = LocationRequest()
         mLocationRequest.setInterval(updateIntervalInMilliseconds)
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS)
+        mLocationRequest.setFastestInterval(updateIntervalInMilliseconds)
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
     }
 

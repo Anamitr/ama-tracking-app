@@ -13,6 +13,7 @@ import com.example.ama_tracking_app.base.BaseActivity
 import com.example.geofence.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
+import com.example.geofence.GeoManualTester
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,7 +46,9 @@ class GetConfigActivity : BaseActivity() {
 
     fun testSth(view : View) {
         val manualTester = ManualTester()
-        manualTester.sendLog("hejo")
+//        manualTester.sendLog("hejo")
+        val geoManualTester = GeoManualTester(applicationContext)
+        geoManualTester.testWritingAndReadingFromDb()
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?
@@ -61,7 +64,7 @@ class GetConfigActivity : BaseActivity() {
     fun onMessageEvent(event: ConfigLoadedToViewModelEvent) {
 //        Toast.makeText(this, "Config loaded!", Toast.LENGTH_SHORT).show()
         val configId = viewModel.geoConfiguration.id
-        configId?.let { startActivity(GeofenceLogIntent(configId)) }
+        configId?.let { startActivity(GeoLogIntent(configId)) }
     }
 
 
@@ -89,12 +92,12 @@ class GetConfigActivity : BaseActivity() {
     private fun requestPermissions() {
         val permissionListener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                Log.i(GeofenceLogActivity.TAG, "Permission Granted")
+                Log.i(GeoLogActivity.TAG, "Permission Granted")
                 Toast.makeText(this@GetConfigActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
-                Log.e(GeofenceLogActivity.TAG, "Permission Denied: $deniedPermissions")
+                Log.e(GeoLogActivity.TAG, "Permission Denied: $deniedPermissions")
                 Toast.makeText(
                     this@GetConfigActivity,
                     "Permission Denied: $deniedPermissions",

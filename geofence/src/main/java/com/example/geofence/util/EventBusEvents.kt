@@ -8,3 +8,5 @@ data class ToastEvent(val message: String, val toastLength : Int = Toast.LENGTH_
 class ConfigLoadedToDbEvent(val geoConfiguration: GeoConfiguration)
 
 class ConfigLoadedToViewModelEvent
+
+class ConfigLoadedFromDb(val geoConfiguration: GeoConfiguration)

@@ -7,27 +7,20 @@ import com.example.geofence.repository.ConfigRepository
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import com.example.geofence.model.GeoConfiguration
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ConfigViewModel(
-    private val configRepository: ConfigRepository,
-    private val initialConfigId: String?
+    private val configRepository: ConfigRepository
 ) :
     ViewModel() {
     companion object {
         private val TAG = ConfigViewModel::class.qualifiedName
     }
 
-    lateinit var geoConfiguration: GeoConfiguration
+    var geoConfiguration: GeoConfiguration = GeoConfiguration()
 
     init {
-        initialConfigId?.let {
-            geoConfiguration = configRepository.loadGeoConfigurationFromDb(initialConfigId).value ?: GeoConfiguration()
-        } ?: run {
-            //TODO: handle it somehow
-            // geoConfiguration must be initialized here, but how if initialConfigId is null?
-            geoConfiguration = configRepository.loadGeoConfigurationFromDb("").value ?: GeoConfiguration()
-        }
-
         EventBus.getDefault().register(this)
     }
 
