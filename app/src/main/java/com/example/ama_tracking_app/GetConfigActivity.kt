@@ -1,16 +1,24 @@
 package com.example.ama_tracking_app
 
 //import com.example.ama_tracking_app.viewmodel.ConfigViewModelFactory
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.geofence.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.util.ArrayList
 
 
 class GetConfigActivity : BaseActivity() {
@@ -27,6 +35,10 @@ class GetConfigActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 //        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application)).get(ConfigViewModel::class.java)
         getConfigButton.setOnClickListener { viewModel.loadConfigFromFirebase(configIdEditText.text.toString()) }
+
+        if (!checkPermissions()) {
+            requestPermissions()
+        }
 
         setTestConfigId()
     }
@@ -65,6 +77,36 @@ class GetConfigActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    private fun checkPermissions(): Boolean {
+        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
+    private fun requestPermissions() {
+        val permissionListener: PermissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                Log.i(GeofenceLogActivity.TAG, "Permission Granted")
+                Toast.makeText(this@GetConfigActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
+                Log.e(GeofenceLogActivity.TAG, "Permission Denied: $deniedPermissions")
+                Toast.makeText(
+                    this@GetConfigActivity,
+                    "Permission Denied: $deniedPermissions",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        TedPermission.with(this)
+            .setPermissionListener(permissionListener)
+            .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+            .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+            .check()
     }
 
 }
