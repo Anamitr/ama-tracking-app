@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.GeoLogViewModel
@@ -50,6 +51,12 @@ class GeoLogActivity : BaseActivity() {
 
         //TODO: DataBinding
 //        configNameTextView.text = viewModel.geoConfiguration.name
+
+        log_recycler_view.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@GeoLogActivity)
+            adapter = viewModel.recyclerViewAdapter
+        }
 
     }
 
