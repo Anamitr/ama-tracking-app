@@ -1,10 +1,12 @@
 package com.example.ama_tracking_app.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.ama_tracking_app.recyclerview.RecyclerViewAdapter
 import com.example.geofence.model.GeoConfiguration
 import com.example.geofence.model.GeoLog
 import com.example.geofence.repository.ConfigRepository
+import com.example.geofence.repository.GeoLogRepository
 import com.example.geofence.util.ConfigLoadedFromDb
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -13,7 +15,8 @@ import java.util.*
 
 class GeoLogViewModel(
     private val configRepository: ConfigRepository,
-    private val configId: String
+    private val configId: String,
+    private val geoLogRepository: GeoLogRepository
 ) : ViewModel() {
     companion object {
         private val TAG = GeoLogViewModel::class.qualifiedName
@@ -35,5 +38,8 @@ class GeoLogViewModel(
         }
     }
 
+    fun getGeoLogsLiveData() : LiveData<List<GeoLog>>{
+        return geoLogRepository.getGeoLogsLiveDataByConfigId(configId)
+    }
 
 }

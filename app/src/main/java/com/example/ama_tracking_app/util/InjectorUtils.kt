@@ -19,6 +19,7 @@ object InjectorUtils {
     fun provideGeoLogViewModelFactory(context: Context, configId: String?) : GeoLogViewModelFactory {
         var configIdToPass = configId ?: ""
         val configRepository = GeofenceInjectorUtils.getConfigRepository(context)
-        return GeoLogViewModelFactory(configRepository, configIdToPass)
+        val geoLogRepository = GeofenceInjectorUtils.getGeoLogRepository(context)
+        return GeoLogViewModelFactory(configRepository, configIdToPass, geoLogRepository)
     }
 }

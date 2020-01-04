@@ -1,6 +1,7 @@
 package com.example.geofence.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.geofence.GeoManualTester
 import com.example.geofence.db.GeoLogDao
 import com.example.geofence.model.GeoLog
@@ -16,6 +17,9 @@ class GeoLogRepository private constructor(
     private val geoLogDao: GeoLogDao,
     private val firebaseService: FirebaseService
 ) {
+
+//    val selectedGeoLogs : LiveData<List<GeoLog>> = geoLogDao.getLiveDataGeoLogsByConfigId()
+
     suspend fun insertGeoLog(geoLog : GeoLog) {
         geoLogDao.insert(geoLog)
 //        firebaseService.postLog(geoLog)
@@ -50,6 +54,10 @@ class GeoLogRepository private constructor(
                 }
             }
         })
+    }
+
+    fun getGeoLogsLiveDataByConfigId(configId: String) : LiveData<List<GeoLog>>{
+        return geoLogDao.getLiveDataGeoLogsByConfigId(configId)
     }
 
     companion object {

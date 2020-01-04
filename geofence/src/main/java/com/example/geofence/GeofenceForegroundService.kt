@@ -30,6 +30,9 @@ class GeofenceForegroundService : Service() {
         const val GEOCONFIGURATION_EXTRA_ID = "GEOCONFIGURATION_EXTRA_ID"
         const val START_FOREGROUND_ACTION = "START_FOREGROUND_ACTION"
         const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND_ACTION"
+
+        const val DEBUG_INTERVAL = 10 * 1000L
+        const val SHOULD_INSERT_DEBUG_INTERVAL = true
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -61,7 +64,8 @@ class GeofenceForegroundService : Service() {
             }
 
             intent?.let {
-                geoConfiguration = intent.getSerializableExtra(GEOCONFIGURATION_EXTRA_ID) as GeoConfiguration
+                geoConfiguration =
+                    intent.getSerializableExtra(GEOCONFIGURATION_EXTRA_ID) as GeoConfiguration
             } ?: kotlin.run { geoConfiguration = GeoConfiguration() }
 
             createNotificationChannel()
@@ -99,7 +103,9 @@ class GeofenceForegroundService : Service() {
     }
 
     fun insertDebugInterval() {
-        updateIntervalInMilliseconds = 10 * 1000
+        if (SHOULD_INSERT_DEBUG_INTERVAL){
+            updateIntervalInMilliseconds = DEBUG_INTERVAL
+        }
     }
 
     fun requestLocationUpdates() {

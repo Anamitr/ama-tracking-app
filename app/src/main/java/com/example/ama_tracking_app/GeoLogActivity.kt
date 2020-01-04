@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ama_tracking_app.base.BaseActivity
@@ -58,6 +59,8 @@ class GeoLogActivity : BaseActivity() {
             adapter = viewModel.recyclerViewAdapter
         }
 
+        viewModel.getGeoLogsLiveData()
+            .observe(this, Observer { geoLogs -> viewModel.recyclerViewAdapter.setData(geoLogs) })
     }
 
     @Subscribe

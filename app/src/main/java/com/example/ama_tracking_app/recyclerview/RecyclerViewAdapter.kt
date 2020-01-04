@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ama_tracking_app.R
 import com.example.geofence.model.GeoLog
 
-class RecyclerViewAdapter(private val dataset: List<GeoLog>) :
+class RecyclerViewAdapter(private var dataset: List<GeoLog>) :
     RecyclerView.Adapter<RecyclerViewAdapter.GeoLogViewHolder>() {
     class GeoLogViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
@@ -22,6 +22,11 @@ class RecyclerViewAdapter(private val dataset: List<GeoLog>) :
 
     override fun onBindViewHolder(holder: GeoLogViewHolder, position: Int) {
         holder.textView.text = "${dataset[position].date} ${dataset[position].content}"
+    }
+
+    fun setData(newData: List<GeoLog>) {
+        this.dataset = newData
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataset.size
