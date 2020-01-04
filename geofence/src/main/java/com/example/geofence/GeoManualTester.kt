@@ -24,7 +24,10 @@ class GeoManualTester(val context: Context) {
 
     fun runTest() {
 //        readLogsWithSpecificId()
-        testSendingLog()
+//        testSendingLog()
+
+        testSendingAndSavingToDbGeoLog()
+        readLogsWithSpecificId()
     }
 
     fun testGeoConfigWritingAndReadingFromDb() {
@@ -97,41 +100,37 @@ class GeoManualTester(val context: Context) {
         })
     }
 
-    fun sendLogAndSaveToDb(geoLog : GeoLog) {
-//        val
+    fun testSendingAndSavingToDbGeoLog() {
+        val geoLog = GeoLog("", "80", Date(), "dupa")
+
+        sendLogAndSaveToDb(geoLog)
     }
 
-//    fun sendLog(geoLog : GeoLog) {
-//        val geoLogIdCall: Call<String> = firebaseService.getNextLogId(geoLog.configId)
-//        geoLogIdCall.enqueue(object : Callback<String> {
-//            override fun onFailure(call: Call<String>, t: Throwable) {
-//                Log.e(TAG, "getNextLogId request failed: ${t.localizedMessage}")
-//            }
-//
-//            override fun onResponse(call: Call<String>, response: Response<String>) {
-//                val nextLogId: String? = response.body()
-//                Log.v(TAG, "getNextLogId result: $nextLogId")
-//                nextLogId?.let {
-//                    val postLogCall =
-//                        firebaseService.postLog(geoLog.configId, GeoLog(nextLogId, Date(), content))
-//                    postLogCall.enqueue(object : Callback<String> {
-//                        override fun onFailure(call: Call<String>, t: Throwable) {
-//                            Log.e(TAG, "onFailure: postLog request failed: ${t.localizedMessage}")
-//                        }
-//
-//                        override fun onResponse(call: Call<String>, response: Response<String>) {
-//                            val result = response.body()
-//                            Log.v(TAG, "postLog result: $result")
-//                            if (response.isSuccessful) {
-//                                Log.v(TAG, "postLog successful")
-//                            } else {
-//                                Log.e(TAG, "onResponse: postLog request failed")
-//                            }
-//                        }
-//                    })
-//                }
-//            }
-//        })
-//    }
+    fun sendLogAndSaveToDb(geoLog : GeoLog) {
+        val postLogCall : Call<String> = firebaseService.postLog(geoLog)
+
+        postLogCall.enqueue(object : Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e(TAG, "postLog request failed: ${t.localizedMessage}, inserting geoLog to db without externalId")
+                GlobalScope.launch {
+                    geoLogDao.insert(geoLog)
+                }
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                val result = response.body()
+                Log.v(TAG, "postLog result: $result")
+                if (response.isSuccessful) {
+                    Log.v(TAG, "postLog successful")
+                    geoLog.externalId = result ?: ""
+                } else {
+                    Log.e(TAG, "onResponse: postLog request failed, inserting geoLog to db without externalId")
+                }
+                GlobalScope.launch {
+                    geoLogDao.insert(geoLog)
+                }
+            }
+        })
+    }
 
 }
