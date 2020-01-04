@@ -33,6 +33,7 @@ object GeofenceController {
     }
 
     fun stopGeofenceService() {
+        Log.v(TAG, "stopGeofenceService()")
         val serviceIntent = Intent(context, GeofenceForegroundService::class.java)
         serviceIntent.setAction(GeofenceForegroundService.STOP_FOREGROUND_ACTION)
         ContextCompat.startForegroundService(context, serviceIntent)

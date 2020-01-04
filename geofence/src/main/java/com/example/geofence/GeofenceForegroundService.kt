@@ -95,6 +95,8 @@ class GeofenceForegroundService : Service() {
             startForeground(1, notification)
             requestLocationUpdates()
         } else if (intent?.action.equals(STOP_FOREGROUND_ACTION)) {
+            Log.v(TAG, "STOP_FOREGROUND_ACTION")
+            removeLocationUpdates()
             stopForeground(true)
             stopSelf()
         }

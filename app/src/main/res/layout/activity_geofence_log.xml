@@ -36,7 +36,8 @@
         android:text="@string/stop"
         app:layout_constraintBottom_toBottomOf="@id/configNameTextView"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="stopGeoLocationService"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/log_recycler_view"

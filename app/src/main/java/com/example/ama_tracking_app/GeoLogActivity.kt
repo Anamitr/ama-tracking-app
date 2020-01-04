@@ -3,6 +3,7 @@ package com.example.ama_tracking_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -68,6 +69,10 @@ class GeoLogActivity : BaseActivity() {
         configNameTextView.text = event.geoConfiguration.name
         GeofenceController.init(applicationContext, event.geoConfiguration)
         GeofenceController.startGeofenceService()
+    }
+
+    fun stopGeoLocationService(view : View) {
+        GeofenceController.stopGeofenceService()
     }
 
     override fun onBackPressed() {
