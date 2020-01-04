@@ -173,7 +173,7 @@ class GeofenceForegroundService : Service() {
             mLocation = location
             val logContent = "Position: ${location.latitude}, ${location.longitude}"
             val geoLog = GeoLog("", geoConfiguration.id, Date(), logContent)
-            geoLogRepository.insertGeoLog(geoLog)
+            geoLogRepository.sendLogAndSaveToDb(geoLog)
         }
 
         // Notify anyone listening for broadcasts about the new location.

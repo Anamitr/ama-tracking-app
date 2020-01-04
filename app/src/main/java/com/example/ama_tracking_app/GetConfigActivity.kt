@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.example.ama_tracking_app.base.BaseActivity
+import com.example.ama_tracking_app.util.DEBUG_CONFIG_ID
 import com.example.geofence.util.ConfigLoadedToViewModelEvent
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.ConfigViewModel
@@ -68,7 +69,7 @@ class GetConfigActivity : BaseActivity() {
 
 
     fun setTestConfigId() {
-        configIdEditText.setText("80")
+        configIdEditText.setText(DEBUG_CONFIG_ID)
     }
 
     override fun onStart() {
