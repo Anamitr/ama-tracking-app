@@ -48,7 +48,8 @@ class GetConfigActivity : BaseActivity() {
         val manualTester = ManualTester()
 //        manualTester.sendLog("hejo")
         val geoManualTester = GeoManualTester(applicationContext)
-        geoManualTester.testWritingAndReadingFromDb()
+//        geoManualTester.testGeoConfigWritingAndReadingFromDb()
+        geoManualTester.testGeoLogDbWritingAndReadingFromDb()
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?
