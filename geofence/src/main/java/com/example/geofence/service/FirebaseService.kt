@@ -13,7 +13,7 @@ interface FirebaseService {
     fun updateConfig(@Query("id") configId: String, @Body geoConfiguration: GeoConfiguration): Call<String>
 
     @POST("postLog")
-    fun postLog(@Query("id") configId: String, @Body geoLog: GeoLog): Call<String>
+    fun postLog(@Body geoLog: GeoLog): Call<String>
 
     @GET("getNextLogId")
     fun getNextLogId(@Query("id") configId: String) : Call<String>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.geofence.GeofenceForegroundService.Companion.GEOCONFIGURATION_EXTRA_ID
 import com.example.geofence.GeofenceForegroundService.Companion.INTERVAL_IN_MINUTES_EXTRA_ID
 import com.example.geofence.model.GeoConfiguration
 
@@ -26,6 +27,7 @@ object GeofenceController {
             val serviceIntent = Intent(context, GeofenceForegroundService::class.java)
             serviceIntent.setAction(GeofenceForegroundService.START_FOREGROUND_ACTION)
             serviceIntent.putExtra(INTERVAL_IN_MINUTES_EXTRA_ID, geoConfiguration.positionIntervalInMinutes)
+            serviceIntent.putExtra(GEOCONFIGURATION_EXTRA_ID, geoConfiguration)
             ContextCompat.startForegroundService(context, serviceIntent)
         }
     }

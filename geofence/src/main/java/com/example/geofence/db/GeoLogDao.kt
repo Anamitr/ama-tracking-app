@@ -9,4 +9,7 @@ abstract class GeoLogDao : BaseDao<GeoLog>(){
     @Query("SELECT * FROM geolog")
     abstract fun loadAll() : List<GeoLog>
 
+    @Query("SELECT * FROM geolog where config_id LIKE :configId")
+    abstract fun loadByConfigId(configId : String) : List<GeoLog>
+
 }

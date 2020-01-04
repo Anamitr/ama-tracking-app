@@ -45,11 +45,9 @@ class GetConfigActivity : BaseActivity() {
     }
 
     fun testSth(view : View) {
-        val manualTester = ManualTester()
-//        manualTester.sendLog("hejo")
         val geoManualTester = GeoManualTester(applicationContext)
 //        geoManualTester.testGeoConfigWritingAndReadingFromDb()
-        geoManualTester.testGeoLogDbWritingAndReadingFromDb()
+        geoManualTester.runTest()
     }
 
     //TODO: In MVVM should I start activity from activity or ViewModel?
@@ -70,7 +68,7 @@ class GetConfigActivity : BaseActivity() {
 
 
     fun setTestConfigId() {
-        configIdEditText.setText("22")
+        configIdEditText.setText("80")
     }
 
     override fun onStart() {

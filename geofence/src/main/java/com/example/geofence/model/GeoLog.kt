@@ -7,13 +7,15 @@ import java.util.*
 
 @Entity
 data class GeoLog (
+    @ColumnInfo(name = "external_id") var externalId : String = "",
+    @ColumnInfo(name = "config_id") var configId : String = "",
     @ColumnInfo(name = "date")var date : Date? = null,
     @ColumnInfo(name = "content") val content : String = ""
 ) {
-    @PrimaryKey(autoGenerate = true) var id : Int = 0
+    @PrimaryKey(autoGenerate = true) var internalId : Long = 0
 
     override fun toString(): String {
-        return "GeoLog(id=$id, date=$date, content='$content')"
+        return "GeoLog(externalId='$externalId', internalId=$internalId, configId='$configId', date=$date, content='$content')"
     }
 }
 

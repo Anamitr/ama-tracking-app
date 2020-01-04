@@ -12,7 +12,14 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.example.geofence.model.GeoConfiguration
+import com.example.geofence.model.GeoLog
+import com.example.geofence.repository.GeoLogRepository
+import com.example.geofence.util.GeofenceInjectorUtils
 import com.google.android.gms.location.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.*
 
 
 class GeofenceForegroundService : Service() {
@@ -20,6 +27,7 @@ class GeofenceForegroundService : Service() {
         private val TAG = GeofenceForegroundService::class.qualifiedName
         const val CHANNEL_ID = "GeofenceForegroundService"
         const val INTERVAL_IN_MINUTES_EXTRA_ID = "INTERVAL_IN_MINUTES_EXTRA_ID"
+        const val GEOCONFIGURATION_EXTRA_ID = "GEOCONFIGURATION_EXTRA_ID"
         const val START_FOREGROUND_ACTION = "START_FOREGROUND_ACTION"
         const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND_ACTION"
     }
@@ -32,6 +40,9 @@ class GeofenceForegroundService : Service() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationCallback: LocationCallback
     private var mLocation: Location? = null
+
+    private lateinit var geoConfiguration: GeoConfiguration
+    private lateinit var geoLogRepository: GeoLogRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action.equals(START_FOREGROUND_ACTION)) {
@@ -48,6 +59,10 @@ class GeofenceForegroundService : Service() {
             } ?: run {
                 Log.e(TAG, "Didn't received intervalInMinutes, set default value")
             }
+
+            intent?.let {
+                geoConfiguration = intent.getSerializableExtra(GEOCONFIGURATION_EXTRA_ID) as GeoConfiguration
+            } ?: kotlin.run { geoConfiguration = GeoConfiguration() }
 
             createNotificationChannel()
 
@@ -66,8 +81,12 @@ class GeofenceForegroundService : Service() {
                 }
             }
 
+            insertDebugInterval()
+
             createLocationRequest()
             getLastLocation()
+
+            geoLogRepository = GeofenceInjectorUtils.getGeoLogRepository(this)
 
             startForeground(1, notification)
             requestLocationUpdates()
@@ -77,6 +96,10 @@ class GeofenceForegroundService : Service() {
         }
 
         return START_STICKY
+    }
+
+    fun insertDebugInterval() {
+        updateIntervalInMilliseconds = 10 * 1000
     }
 
     fun requestLocationUpdates() {
@@ -145,8 +168,14 @@ class GeofenceForegroundService : Service() {
     }
 
     private fun onNewLocation(location: Location) {
-        Log.i(TAG, "New location: $location")
-        mLocation = location
+        GlobalScope.launch {
+            Log.i(TAG, "New location: $location")
+            mLocation = location
+            val logContent = "Position: ${location.latitude}, ${location.longitude}"
+            val geoLog = GeoLog("", geoConfiguration.id, Date(), logContent)
+            geoLogRepository.insertGeoLog(geoLog)
+        }
+
         // Notify anyone listening for broadcasts about the new location.
 //        val intent = Intent(ACTION_BROADCAST)
 //        intent.putExtra(EXTRA_LOCATION, location)
