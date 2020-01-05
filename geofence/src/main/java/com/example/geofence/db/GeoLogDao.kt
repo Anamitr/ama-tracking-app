@@ -16,4 +16,7 @@ abstract class GeoLogDao : BaseDao<GeoLog>(){
     @Query("SELECT * FROM geolog WHERE config_id LIKE :configId ORDER BY date ")
     abstract fun getLiveDataGeoLogsByConfigId(configId: String) : LiveData<List<GeoLog>>
 
+    @Query("DELETE FROM geolog WHERE config_id = :configId")
+    abstract fun deleteLogs(configId: String)
+
 }

@@ -75,6 +75,10 @@ class GeoLogActivity : BaseActivity() {
         GeofenceController.stopGeofenceService()
     }
 
+    fun clearLogs(view: View) {
+        viewModel.clearLogs()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         Toast.makeText(applicationContext, "Stopping foreground service", Toast.LENGTH_SHORT).show()

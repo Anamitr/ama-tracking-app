@@ -42,4 +42,8 @@ class GeoLogViewModel(
         return geoLogRepository.getGeoLogsLiveDataByConfigId(configId)
     }
 
+    fun clearLogs() {
+        geoLogRepository.clearLogs(configId)
+    }
+
 }
