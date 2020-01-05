@@ -26,8 +26,10 @@ class GeoManualTester(val context: Context) {
 //        readLogsWithSpecificId()
 //        testSendingLog()
 
-        testSendingAndSavingToDbGeoLog()
-        readLogsWithSpecificId()
+//        testSendingAndSavingToDbGeoLog()
+//        readLogsWithSpecificId()
+
+        testClearLogs()
     }
 
     fun testGeoConfigWritingAndReadingFromDb() {
@@ -130,6 +132,28 @@ class GeoManualTester(val context: Context) {
                     geoLogDao.insert(geoLog)
                 }
             }
+        })
+    }
+
+    fun testClearLogs() {
+        val configId = "82"
+        val clearLogCall = firebaseService.clearLogs(configId)
+
+        clearLogCall.enqueue(object :Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e(TAG, "clearLogs request failed: ${t.localizedMessage}")
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                val result = response.body()
+                Log.v(TAG, "clearLogs result: $result")
+                if (response.isSuccessful) {
+                    Log.v(TAG, "clearLogs successful")
+                } else {
+                    Log.e(TAG, "onResponse: clearLogs request failed")
+                }
+            }
+
         })
     }
 
