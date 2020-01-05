@@ -28,7 +28,7 @@ object GeofenceController {
             serviceIntent.setAction(GeofenceForegroundService.START_FOREGROUND_ACTION)
             serviceIntent.putExtra(INTERVAL_IN_MINUTES_EXTRA_ID, geoConfiguration.positionIntervalInMinutes)
             serviceIntent.putExtra(GEOCONFIGURATION_EXTRA_ID, geoConfiguration)
-            ContextCompat.startForegroundService(context, serviceIntent)
+            context.startService(serviceIntent)
         }
     }
 
@@ -36,7 +36,7 @@ object GeofenceController {
         Log.v(TAG, "stopGeofenceService()")
         val serviceIntent = Intent(context, GeofenceForegroundService::class.java)
         serviceIntent.setAction(GeofenceForegroundService.STOP_FOREGROUND_ACTION)
-        ContextCompat.startForegroundService(context, serviceIntent)
+        context.startService(serviceIntent)
     }
 
 }

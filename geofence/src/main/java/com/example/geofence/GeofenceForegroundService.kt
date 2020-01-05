@@ -31,6 +31,8 @@ class GeofenceForegroundService : Service() {
         const val START_FOREGROUND_ACTION = "START_FOREGROUND_ACTION"
         const val STOP_FOREGROUND_ACTION = "STOP_FOREGROUND_ACTION"
 
+        var isRunning = false
+
         const val DEBUG_INTERVAL = 10 * 1000L
         const val SHOULD_INSERT_DEBUG_INTERVAL = true
     }
@@ -48,7 +50,7 @@ class GeofenceForegroundService : Service() {
     private lateinit var geoLogRepository: GeoLogRepository
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action.equals(START_FOREGROUND_ACTION)) {
+        if (intent?.action.equals(START_FOREGROUND_ACTION) && !isRunning) {
             Toast.makeText(this, "Service starting", Toast.LENGTH_SHORT).show()
             val intervalInMinutes = intent?.getIntExtra(INTERVAL_IN_MINUTES_EXTRA_ID, 15)
 
@@ -94,13 +96,16 @@ class GeofenceForegroundService : Service() {
 
             startForeground(1, notification)
             requestLocationUpdates()
-        } else if (intent?.action.equals(STOP_FOREGROUND_ACTION)) {
+            isRunning = true
+        } else if (intent?.action.equals(STOP_FOREGROUND_ACTION) && isRunning) {
             Log.v(TAG, "STOP_FOREGROUND_ACTION")
             removeLocationUpdates()
             stopForeground(true)
             stopSelf()
+            isRunning = false
         }
 
+        Log.v(TAG, "isRunning = $isRunning")
         return START_STICKY
     }
 

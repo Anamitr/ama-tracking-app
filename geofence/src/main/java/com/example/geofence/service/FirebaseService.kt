@@ -17,4 +17,7 @@ interface FirebaseService {
 
     @GET("getNextLogId")
     fun getNextLogId(@Query("id") configId: String) : Call<String>
+
+    @DELETE("clearLogs")
+    fun clearLogs(@Query("id") configId: String) : Call<String>
 }
