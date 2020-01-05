@@ -10,3 +10,4 @@ exports.getConfig = require('./config-endpoints').getConfig;
 exports.updateConfig = require('./config-endpoints').updateConfig;
 exports.postLog = require('./logging-endpoints').postLog;
 exports.getNextLogId = require('./logging-endpoints').getNextLogId;
+exports.clearLogs = require('./logging-endpoints').clearLogs;
