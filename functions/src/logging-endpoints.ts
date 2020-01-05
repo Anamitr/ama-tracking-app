@@ -63,7 +63,7 @@ exports.clearLogs = functions.https.onRequest(((request, response) => {
 
     deleteCollection(db, ref)
         .then(() => {
-            response.status(200).send()
+            response.status(200).send("Successfully deleted logs at configId = " + configId)
         })
         .catch((err: Error) => {
             console.log(err.message)
