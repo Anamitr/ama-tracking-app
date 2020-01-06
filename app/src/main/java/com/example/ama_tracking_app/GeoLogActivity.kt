@@ -73,8 +73,13 @@ class GeoLogActivity : BaseActivity() {
         GeofenceController.startGeofenceService()
     }
 
-    fun stopGeoLocationService(view : View) {
-        GeofenceController.stopGeofenceService()
+    fun toggleGeoLocationService(view : View) {
+        val result = GeofenceController.toggleGeofenceService()
+        if (result) {
+            toggleGeofenceServiceButton.text = "STOP"
+        } else {
+            toggleGeofenceServiceButton.text = "START"
+        }
     }
 
     fun clearLogsButtonClick(view: View) {

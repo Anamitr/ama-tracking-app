@@ -185,8 +185,7 @@ class GeofenceForegroundService : Service() {
             Log.i(TAG, "New location: $location")
             mLocation = location
             val logContent = "Position: ${location.latitude}, ${location.longitude}"
-            val geoLog = GeoLog("", geoConfiguration.id, Date(), logContent)
-            geoLogRepository.sendLogAndSaveToDb(geoLog)
+            GeofenceController.sendLog(logContent)
         }
 
         // Notify anyone listening for broadcasts about the new location.
