@@ -1,10 +1,8 @@
 package com.example.geofence
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Intent
+import android.content.IntentFilter
 import android.location.Location
 import android.os.Build
 import android.os.IBinder
@@ -34,7 +32,7 @@ class GeofenceForegroundService : Service() {
         var isRunning = false
 
         const val DEBUG_INTERVAL = 10 * 1000L
-        const val SHOULD_INSERT_DEBUG_INTERVAL = true
+        const val SHOULD_INSERT_DEBUG_INTERVAL = false
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -96,6 +94,8 @@ class GeofenceForegroundService : Service() {
 
             startForeground(1, notification)
             requestLocationUpdates()
+
+            registerForActivityTransitions()
             isRunning = true
         } else if (intent?.action.equals(STOP_FOREGROUND_ACTION) && isRunning) {
             Log.v(TAG, "STOP_FOREGROUND_ACTION")
@@ -110,7 +110,7 @@ class GeofenceForegroundService : Service() {
     }
 
     fun insertDebugInterval() {
-        if (SHOULD_INSERT_DEBUG_INTERVAL){
+        if (SHOULD_INSERT_DEBUG_INTERVAL) {
             updateIntervalInMilliseconds = DEBUG_INTERVAL
         }
     }
@@ -196,6 +196,31 @@ class GeofenceForegroundService : Service() {
 //        if (serviceIsRunningInForeground(this)) {
 //            mNotificationManager.notify(NOTIFICATION_ID, getNotification())
 //        }
+    }
+
+    private fun registerForActivityTransitions() {
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+        this.registerReceiver(ActivityTransitionBroadcastReceiver(), intentFilter)
+
+        val activityTransitionRequest = ActivityTransitionRequest(TransitionsList.transitions)
+
+        val intent = Intent(this, ActivityTransitionBroadcastReceiver::class.java)
+        intent.action = ActivityTransitionBroadcastReceiver.INTENT_ACTION
+        val pendingIntent =
+            PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val task = ActivityRecognition
+            .getClient(this)
+            .requestActivityTransitionUpdates(activityTransitionRequest, pendingIntent)
+
+        task.addOnSuccessListener {
+            Log.d(TAG, "Registered for updates")
+        }
+
+        task.addOnFailureListener { e ->
+            Log.e(TAG, e.message)
+        }
     }
 
 

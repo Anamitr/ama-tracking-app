@@ -14,7 +14,7 @@ class RecyclerViewAdapter(private var dataset: List<GeoLog>) :
     RecyclerView.Adapter<RecyclerViewAdapter.GeoLogViewHolder>() {
     class GeoLogViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
-    val datePattern = "yyy.MM.dd hh:mm"
+    val datePattern = "yyy.MM.dd HH:mm"
     val simpleDateFormat = SimpleDateFormat(datePattern)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeoLogViewHolder {

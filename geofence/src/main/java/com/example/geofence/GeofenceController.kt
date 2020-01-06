@@ -3,7 +3,6 @@ package com.example.geofence
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat
 import com.example.geofence.GeofenceForegroundService.Companion.GEOCONFIGURATION_EXTRA_ID
 import com.example.geofence.GeofenceForegroundService.Companion.INTERVAL_IN_MINUTES_EXTRA_ID
 import com.example.geofence.model.GeoConfiguration

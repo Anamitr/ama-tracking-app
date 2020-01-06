@@ -1,18 +1,27 @@
 package com.example.geofence
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
 import com.example.geofence.db.AppDatabase
 import com.example.geofence.model.GeoConfiguration
 import com.example.geofence.model.GeoLog
 import com.example.geofence.service.FirebaseService
 import com.example.geofence.service.RetrofitServiceProvider
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import com.google.android.gms.location.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+
 
 class GeoManualTester(val context: Context) {
     companion object {
@@ -29,7 +38,9 @@ class GeoManualTester(val context: Context) {
 //        testSendingAndSavingToDbGeoLog()
 //        readLogsWithSpecificId()
 
-        testClearLogs()
+//        testClearLogs()
+
+        testTransitionApi()
     }
 
     fun testGeoConfigWritingAndReadingFromDb() {
@@ -155,6 +166,126 @@ class GeoManualTester(val context: Context) {
             }
 
         })
+    }
+
+    fun testTransitionApi() {
+        val requiredPermission = "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        val checkVal: Int = context.checkCallingOrSelfPermission(requiredPermission)
+        if (checkVal== PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(context, "PERMISSION_GRANTED dsagsdfg", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "PERMISSION NOT GRANTED!!!", Toast.LENGTH_SHORT).show()
+        }
+        Log.v(TAG, "ACTIVITY_RECOGNITION permission: ${checkVal== PackageManager.PERMISSION_GRANTED}")
+
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+        context.registerReceiver(ActivityTransitionBroadcastReceiver(), intentFilter)
+
+        val activityTransitionRequest = ActivityTransitionRequest(getTransitionList())
+
+//        val intent = Intent(context, TransitionIntentService::class.java)
+//        val pendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val intent = Intent(context, ActivityTransitionBroadcastReceiver::class.java)
+        intent.setAction(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val task = ActivityRecognition
+            .getClient(context)
+            .requestActivityTransitionUpdates(activityTransitionRequest, pendingIntent)
+
+        task.addOnSuccessListener {
+            Log.d(TAG, "Registered for updates")
+        }
+
+        task.addOnFailureListener { e ->
+            Log.e(TAG, e.message)
+        }
+
+
+
+        emulateActivityTransition()
+    }
+
+    fun emulateActivityTransition() {
+        var intent = Intent()
+
+        // Your broadcast receiver action
+
+        intent.action = ActivityTransitionBroadcastReceiver.INTENT_ACTION
+        var events: ArrayList<ActivityTransitionEvent> = arrayListOf()
+
+        // You can set desired events with their corresponding state
+
+        var transitionEvent = ActivityTransitionEvent(DetectedActivity.IN_VEHICLE, ActivityTransition.ACTIVITY_TRANSITION_ENTER, SystemClock.elapsedRealtimeNanos())
+        events.add(transitionEvent)
+        var result = ActivityTransitionResult(events)
+        SafeParcelableSerializer.serializeToIntentExtra(result, intent, "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT")
+//        activity?.sendBroadcast(intent)
+        context.sendBroadcast(intent)
+
+//        intent = Intent(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+//        context.sendBroadcast(intent)
+//
+//        intent = Intent()
+//        intent.setAction(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+//        context.sendBroadcast(intent)
+    }
+
+    fun getTransitionList() :List<ActivityTransition> {
+        val transitions = mutableListOf<ActivityTransition>()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.IN_VEHICLE)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.IN_VEHICLE)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.WALKING)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.WALKING)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.RUNNING)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.RUNNING)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.STILL)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+
+        transitions +=
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.STILL)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+
+        return transitions
     }
 
 }

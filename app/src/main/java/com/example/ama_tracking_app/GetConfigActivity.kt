@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.ama_tracking_app.util.DEBUG_CONFIG_ID
 import com.example.geofence.util.ConfigLoadedToViewModelEvent
@@ -35,12 +36,9 @@ class GetConfigActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        viewModel = ViewModelProviders.of(this, ConfigViewModelFactory(application)).get(ConfigViewModel::class.java)
         getConfigButton.setOnClickListener { viewModel.loadConfigFromFirebase(configIdEditText.text.toString()) }
 
-        if (!checkPermissions()) {
-            requestPermissions()
-        }
+        requestPermissions()
 
         setTestConfigId()
     }
@@ -80,13 +78,6 @@ class GetConfigActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-    }
-
-    private fun checkPermissions(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
     }
 
     private fun requestPermissions() {
