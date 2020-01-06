@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -13,8 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ama_tracking_app.base.BaseActivity
 import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.GeoLogViewModel
+import com.example.geofence.ActivityTransitionBroadcastReceiver
 import com.example.geofence.GeofenceController
 import com.example.geofence.util.ConfigLoadedFromDb
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import com.google.android.gms.location.ActivityTransition
+import com.google.android.gms.location.ActivityTransitionEvent
+import com.google.android.gms.location.ActivityTransitionResult
+import com.google.android.gms.location.DetectedActivity
 import kotlinx.android.synthetic.main.activity_geofence_log.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -109,4 +116,34 @@ class GeoLogActivity : BaseActivity() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
+
+    fun testFun(view: View) {
+        emulateActivityTransition()
+    }
+
+    fun emulateActivityTransition() {
+        var intent = Intent()
+
+        // Your broadcast receiver action
+
+        intent.action = ActivityTransitionBroadcastReceiver.INTENT_ACTION
+        var events: ArrayList<ActivityTransitionEvent> = arrayListOf()
+
+        // You can set desired events with their corresponding state
+
+        var transitionEvent = ActivityTransitionEvent(DetectedActivity.ON_BICYCLE, ActivityTransition.ACTIVITY_TRANSITION_ENTER, SystemClock.elapsedRealtimeNanos())
+        events.add(transitionEvent)
+        var result = ActivityTransitionResult(events)
+        SafeParcelableSerializer.serializeToIntentExtra(result, intent, "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT")
+//        activity?.sendBroadcast(intent)
+        this.sendBroadcast(intent)
+
+//        intent = Intent(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+//        context.sendBroadcast(intent)
+//
+//        intent = Intent()
+//        intent.setAction(ActivityTransitionBroadcastReceiver.INTENT_ACTION)
+//        context.sendBroadcast(intent)
+    }
+
 }
