@@ -1,6 +1,8 @@
 package com.example.ama_tracking_app
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -75,8 +77,17 @@ class GeoLogActivity : BaseActivity() {
         GeofenceController.stopGeofenceService()
     }
 
-    fun clearLogs(view: View) {
-        viewModel.clearLogs()
+    fun clearLogsButtonClick(view: View) {
+        val dialogBuilder = AlertDialog.Builder(this).apply {
+            title = "Clear logs"
+            setMessage("Are you sure you want to clear logs?")
+            setPositiveButton("Yes") {
+                dialog, which ->
+                viewModel.clearLogs()
+            }
+            setNegativeButton("No") { dialog, which -> }
+            show()
+        }
     }
 
     override fun onBackPressed() {

@@ -64,6 +64,6 @@
         android:text="@string/clear_logs"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:onClick="clearLogs"/>
+        android:onClick="clearLogsButtonClick"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

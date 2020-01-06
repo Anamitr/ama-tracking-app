@@ -12,8 +12,8 @@ import com.example.geofence.model.GeoConfiguration
 object GeofenceController {
     private val TAG = GeofenceController::class.java.simpleName
 
-    private lateinit var context:Context
-    private lateinit var geoConfiguration : GeoConfiguration
+    private lateinit var context: Context
+    private lateinit var geoConfiguration: GeoConfiguration
 
     fun init(context: Context, geoConfiguration: GeoConfiguration) {
         this.context = context
@@ -21,15 +21,15 @@ object GeofenceController {
     }
 
     fun startGeofenceService() {
-        if(isServiceRunning(context, GeofenceForegroundService::class.java.name)) {
-            Log.i(TAG, "GeofenceForegroundService already running")
-        } else {
-            val serviceIntent = Intent(context, GeofenceForegroundService::class.java)
-            serviceIntent.setAction(GeofenceForegroundService.START_FOREGROUND_ACTION)
-            serviceIntent.putExtra(INTERVAL_IN_MINUTES_EXTRA_ID, geoConfiguration.positionIntervalInMinutes)
-            serviceIntent.putExtra(GEOCONFIGURATION_EXTRA_ID, geoConfiguration)
-            context.startService(serviceIntent)
-        }
+        val serviceIntent = Intent(context, GeofenceForegroundService::class.java)
+        serviceIntent.setAction(GeofenceForegroundService.START_FOREGROUND_ACTION)
+        serviceIntent.putExtra(
+            INTERVAL_IN_MINUTES_EXTRA_ID,
+            geoConfiguration.positionIntervalInMinutes
+        )
+        serviceIntent.putExtra(GEOCONFIGURATION_EXTRA_ID, geoConfiguration)
+        context.startService(serviceIntent)
+
     }
 
     fun stopGeofenceService() {

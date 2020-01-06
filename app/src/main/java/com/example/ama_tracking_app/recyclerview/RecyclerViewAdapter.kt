@@ -6,10 +6,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ama_tracking_app.R
 import com.example.geofence.model.GeoLog
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 
 class RecyclerViewAdapter(private var dataset: List<GeoLog>) :
     RecyclerView.Adapter<RecyclerViewAdapter.GeoLogViewHolder>() {
     class GeoLogViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+
+    val datePattern = "yyy.MM.dd hh:mm"
+    val simpleDateFormat = SimpleDateFormat(datePattern)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GeoLogViewHolder {
         val textView = LayoutInflater.from(parent.context).inflate(
@@ -21,7 +27,8 @@ class RecyclerViewAdapter(private var dataset: List<GeoLog>) :
     }
 
     override fun onBindViewHolder(holder: GeoLogViewHolder, position: Int) {
-        holder.textView.text = "${dataset[position].date} ${dataset[position].content}"
+        val dateString = simpleDateFormat.format(dataset[position].date)
+        holder.textView.text = "${dateString} ${dataset[position].content}"
     }
 
     fun setData(newData: List<GeoLog>) {
