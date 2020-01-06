@@ -26,4 +26,42 @@ object TransitionsList {
         }
     }
 
+    fun getActivityTypeNameFromInt(transitionInt : Int) : String {
+        var result = "UNKNOWN"
+        when (transitionInt) {
+            DetectedActivity.IN_VEHICLE -> {
+                result = "IN_VEHICLE"
+            }
+            DetectedActivity.ON_BICYCLE -> {
+                result = "ON_BICYCLE"
+            }
+            DetectedActivity.ON_FOOT -> {
+                result = "ON_FOOT"
+            }
+            DetectedActivity.RUNNING -> {
+                result = "RUNNING"
+            }
+            DetectedActivity.STILL -> {
+                result = "STILL"
+            }
+            DetectedActivity.WALKING -> {
+                result = "WALKING"
+            }
+        }
+        return result
+    }
+
+    fun getTransitionTypeFromInt(activityTransition : Int) : String {
+        var result = "UNKNOWN"
+        when (activityTransition) {
+            ActivityTransition.ACTIVITY_TRANSITION_EXIT -> {
+                result = "EXIT"
+            }
+            ActivityTransition.ACTIVITY_TRANSITION_ENTER -> {
+                result = "ENTER"
+            }
+        }
+        return result
+    }
+
 }
