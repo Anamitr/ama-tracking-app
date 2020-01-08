@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionResult
 import com.google.android.gms.location.DetectedActivity
 
@@ -27,6 +28,10 @@ class ActivityTransitionBroadcastReceiver : BroadcastReceiver() {
                     .extractResult(intent)
                 for(event in intentResult!!.transitionEvents) {
                     val logContent = "Transition: ${TransitionsList.getActivityTypeNameFromInt(event.activityType)} (${TransitionsList.getTransitionTypeFromInt(event.transitionType)})"
+                    if(event.transitionType == ActivityTransition.ACTIVITY_TRANSITION_ENTER) {
+                        GeofenceController.setActivityType(event.activityType)
+                    }
+
                     Toast.makeText(context, logContent, Toast.LENGTH_SHORT).show()
                     GeofenceController.sendLog(logContent)
                 }

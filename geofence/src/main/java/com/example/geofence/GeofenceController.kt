@@ -8,7 +8,11 @@ import com.example.geofence.GeofenceForegroundService.Companion.INTERVAL_IN_MINU
 import com.example.geofence.model.GeoConfiguration
 import com.example.geofence.model.GeoLog
 import com.example.geofence.repository.GeoLogRepository
+import com.example.geofence.util.DetectedActivityMovingEvent
+import com.example.geofence.util.DetectedActivityStillEvent
 import com.example.geofence.util.GeofenceInjectorUtils
+import com.google.android.gms.location.DetectedActivity
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 
@@ -16,8 +20,11 @@ object GeofenceController {
     private val TAG = GeofenceController::class.java.simpleName
 
     private lateinit var context: Context
-    private lateinit var geoConfiguration: GeoConfiguration
     private lateinit var geoLogRepository : GeoLogRepository
+
+    private lateinit var geoConfiguration: GeoConfiguration
+    public var currentActivityType = DetectedActivity.UNKNOWN
+
 
     fun init(context: Context, geoConfiguration: GeoConfiguration) {
         this.context = context
@@ -58,6 +65,17 @@ object GeofenceController {
     fun sendLog(logContent : String) {
         val geoLog = GeoLog("", geoConfiguration.id, Date(), logContent)
         geoLogRepository.sendLogAndSaveToDb(geoLog)
+    }
+
+    fun setActivityType(activityType: Int) {
+        if (currentActivityType == DetectedActivity.STILL || activityType != DetectedActivity.STILL) {
+            // Started moving
+            EventBus.getDefault().post(DetectedActivityMovingEvent())
+        } else if (activityType == DetectedActivity.STILL || currentActivityType != DetectedActivity.STILL) {
+            // Stopped moving
+            EventBus.getDefault().post(DetectedActivityStillEvent())
+        }
+        currentActivityType = activityType
     }
 
 }

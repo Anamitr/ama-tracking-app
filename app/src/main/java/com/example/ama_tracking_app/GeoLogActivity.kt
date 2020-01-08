@@ -2,7 +2,6 @@ package com.example.ama_tracking_app
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -16,7 +15,7 @@ import com.example.ama_tracking_app.util.InjectorUtils
 import com.example.ama_tracking_app.viewmodel.GeoLogViewModel
 import com.example.geofence.ActivityTransitionBroadcastReceiver
 import com.example.geofence.GeofenceController
-import com.example.geofence.util.ConfigLoadedFromDb
+import com.example.geofence.util.ConfigLoadedFromDbEvent
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionEvent
@@ -74,7 +73,7 @@ class GeoLogActivity : BaseActivity() {
     }
 
     @Subscribe
-    fun onMessageEvent(event: ConfigLoadedFromDb) {
+    fun onMessageEvent(event: ConfigLoadedFromDbEvent) {
         configNameTextView.text = event.geoConfiguration.name
         GeofenceController.init(applicationContext, event.geoConfiguration)
         GeofenceController.startGeofenceService()
@@ -130,8 +129,11 @@ class GeoLogActivity : BaseActivity() {
         var events: ArrayList<ActivityTransitionEvent> = arrayListOf()
 
         // You can set desired events with their corresponding state
+        var detectedActivity = DetectedActivity.STILL
+        if(GeofenceController.currentActivityType == DetectedActivity.STILL) detectedActivity = DetectedActivity.ON_BICYCLE
+        var transitionEvent = ActivityTransitionEvent(detectedActivity, ActivityTransition.ACTIVITY_TRANSITION_ENTER, SystemClock.elapsedRealtimeNanos())
+//        GeofenceController.setActivityType(detectedActivity)
 
-        var transitionEvent = ActivityTransitionEvent(DetectedActivity.ON_BICYCLE, ActivityTransition.ACTIVITY_TRANSITION_ENTER, SystemClock.elapsedRealtimeNanos())
         events.add(transitionEvent)
         var result = ActivityTransitionResult(events)
         SafeParcelableSerializer.serializeToIntentExtra(result, intent, "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT")

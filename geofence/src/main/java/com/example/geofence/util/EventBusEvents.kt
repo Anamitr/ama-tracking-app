@@ -9,4 +9,8 @@ class ConfigLoadedToDbEvent(val geoConfiguration: GeoConfiguration)
 
 class ConfigLoadedToViewModelEvent
 
-class ConfigLoadedFromDb(val geoConfiguration: GeoConfiguration)
+class ConfigLoadedFromDbEvent(val geoConfiguration: GeoConfiguration)
+
+class DetectedActivityStillEvent
+
+class DetectedActivityMovingEvent

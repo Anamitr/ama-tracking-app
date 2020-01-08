@@ -7,7 +7,7 @@ import com.example.geofence.model.GeoConfiguration
 import com.example.geofence.model.GeoLog
 import com.example.geofence.repository.ConfigRepository
 import com.example.geofence.repository.GeoLogRepository
-import com.example.geofence.util.ConfigLoadedFromDb
+import com.example.geofence.util.ConfigLoadedFromDbEvent
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -34,7 +34,7 @@ class GeoLogViewModel(
 //        EventBus.getDefault().register(this)
         GlobalScope.launch {
             geoConfiguration = configRepository.loadGeoConfigurationFromDb(configId)
-            EventBus.getDefault().post(ConfigLoadedFromDb(geoConfiguration))
+            EventBus.getDefault().post(ConfigLoadedFromDbEvent(geoConfiguration))
         }
     }
 

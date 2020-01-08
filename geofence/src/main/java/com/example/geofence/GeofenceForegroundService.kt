@@ -13,10 +13,14 @@ import androidx.core.app.NotificationCompat
 import com.example.geofence.model.GeoConfiguration
 import com.example.geofence.model.GeoLog
 import com.example.geofence.repository.GeoLogRepository
+import com.example.geofence.util.DetectedActivityMovingEvent
+import com.example.geofence.util.DetectedActivityStillEvent
 import com.example.geofence.util.GeofenceInjectorUtils
 import com.google.android.gms.location.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.*
 
 
@@ -31,8 +35,8 @@ class GeofenceForegroundService : Service() {
 
         var isRunning = false
 
-        const val DEBUG_INTERVAL = 10 * 1000L
-        const val SHOULD_INSERT_DEBUG_INTERVAL = false
+        const val DEBUG_INTERVAL = 5 * 1000L
+        const val SHOULD_INSERT_DEBUG_INTERVAL = true
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -46,6 +50,11 @@ class GeofenceForegroundService : Service() {
 
     private lateinit var geoConfiguration: GeoConfiguration
     private lateinit var geoLogRepository: GeoLogRepository
+
+    override fun onCreate() {
+        super.onCreate()
+        EventBus.getDefault().register(this)
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action.equals(START_FOREGROUND_ACTION) && !isRunning) {
@@ -223,9 +232,23 @@ class GeofenceForegroundService : Service() {
         }
     }
 
+    @Subscribe
+    fun onMessageEvent(event : DetectedActivityStillEvent) {
+        removeLocationUpdates()
+    }
+
+    @Subscribe
+    fun onMessageEvent(event: DetectedActivityMovingEvent) {
+        requestLocationUpdates()
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }
