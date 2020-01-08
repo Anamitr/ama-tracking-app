@@ -16,6 +16,7 @@ import com.example.geofence.repository.GeoLogRepository
 import com.example.geofence.util.DetectedActivityMovingEvent
 import com.example.geofence.util.DetectedActivityStillEvent
 import com.example.geofence.util.GeofenceInjectorUtils
+import com.example.geofence.util.PositionIntervalChangedEvent
 import com.google.android.gms.location.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class GeofenceForegroundService : Service() {
         var isRunning = false
 
         const val DEBUG_INTERVAL = 5 * 1000L
-        const val SHOULD_INSERT_DEBUG_INTERVAL = true
+        const val SHOULD_INSERT_DEBUG_INTERVAL = false
     }
 
     private var updateIntervalInMilliseconds: Long = 1 * 3 * 1000
@@ -67,7 +68,7 @@ class GeofenceForegroundService : Service() {
             )
 
             intervalInMinutes?.let {
-                updateIntervalInMilliseconds = intervalInMinutes * 60L * 1000L
+                setUpdateIntervalInMilisecondsFromMinutes(intervalInMinutes)
             } ?: run {
                 Log.e(TAG, "Didn't received intervalInMinutes, set default value")
             }
@@ -118,10 +119,21 @@ class GeofenceForegroundService : Service() {
         return START_STICKY
     }
 
+    private fun setUpdateIntervalInMilisecondsFromMinutes(intervalInMinutes: Int) {
+        updateIntervalInMilliseconds = intervalInMinutes * 60L * 1000L
+    }
+
     fun insertDebugInterval() {
         if (SHOULD_INSERT_DEBUG_INTERVAL) {
             updateIntervalInMilliseconds = DEBUG_INTERVAL
         }
+    }
+
+    private fun createLocationRequest() {
+        mLocationRequest = LocationRequest()
+        mLocationRequest.setInterval(updateIntervalInMilliseconds)
+        mLocationRequest.setFastestInterval(updateIntervalInMilliseconds)
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
     }
 
     fun requestLocationUpdates() {
@@ -150,6 +162,7 @@ class GeofenceForegroundService : Service() {
         }
     }
 
+
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel: NotificationChannel = NotificationChannel(
@@ -164,14 +177,6 @@ class GeofenceForegroundService : Service() {
             Toast.makeText(this, "SDK_INT < 0 !", Toast.LENGTH_LONG).show()
             Log.e(TAG, "SDK_INT < 0 !")
         }
-    }
-
-
-    private fun createLocationRequest() {
-        mLocationRequest = LocationRequest()
-        mLocationRequest.setInterval(updateIntervalInMilliseconds)
-        mLocationRequest.setFastestInterval(updateIntervalInMilliseconds)
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
     }
 
     private fun getLastLocation() {
@@ -239,6 +244,15 @@ class GeofenceForegroundService : Service() {
 
     @Subscribe
     fun onMessageEvent(event: DetectedActivityMovingEvent) {
+        requestLocationUpdates()
+    }
+
+    @Subscribe
+    fun onPositionIntervalChangeEvent(event : PositionIntervalChangedEvent) {
+        geoConfiguration = GeoConfiguration(geoConfiguration.id, geoConfiguration.name, event.positionInterval, geoConfiguration.token, geoConfiguration.trackedObjectId)
+        setUpdateIntervalInMilisecondsFromMinutes(event.positionInterval)
+        removeLocationUpdates()
+        createLocationRequest()
         requestLocationUpdates()
     }
 

@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -103,6 +105,23 @@ class GeoLogActivity : BaseActivity() {
                 viewModel.clearLogs()
             }
             setNegativeButton("No") { dialog, which -> }
+            show()
+        }
+    }
+
+    fun changeConfigurationClick(view: View) {
+        val dialogBuilder = AlertDialog.Builder(this).apply {
+            title = "Change configuration"
+            setMessage("Enter new location refresh rate in minutes:")
+            val inputEditText = EditText(this@GeoLogActivity)
+            inputEditText.inputType = InputType.TYPE_CLASS_NUMBER
+            inputEditText.maxEms = 3
+            setView(inputEditText)
+
+            setPositiveButton("Change") { dialog, which ->
+                GeofenceController.changePositionInterval(inputEditText.text.toString().toInt())
+            }
+            setNegativeButton("Cancel") { dialog, which -> }
             show()
         }
     }

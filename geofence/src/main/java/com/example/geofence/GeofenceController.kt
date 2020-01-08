@@ -3,6 +3,7 @@ package com.example.geofence
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.example.geofence.GeofenceForegroundService.Companion.GEOCONFIGURATION_EXTRA_ID
 import com.example.geofence.GeofenceForegroundService.Companion.INTERVAL_IN_MINUTES_EXTRA_ID
 import com.example.geofence.model.GeoConfiguration
@@ -11,6 +12,7 @@ import com.example.geofence.repository.GeoLogRepository
 import com.example.geofence.util.DetectedActivityMovingEvent
 import com.example.geofence.util.DetectedActivityStillEvent
 import com.example.geofence.util.GeofenceInjectorUtils
+import com.example.geofence.util.PositionIntervalChangedEvent
 import com.google.android.gms.location.DetectedActivity
 import org.greenrobot.eventbus.EventBus
 import java.util.*
@@ -76,6 +78,11 @@ object GeofenceController {
             EventBus.getDefault().post(DetectedActivityStillEvent())
         }
         currentActivityType = activityType
+    }
+
+    fun changePositionInterval(interval: Int) {
+        EventBus.getDefault().post(PositionIntervalChangedEvent(interval))
+        Toast.makeText(context, "Chaning interval to $interval minutes", Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -14,3 +14,5 @@ class ConfigLoadedFromDbEvent(val geoConfiguration: GeoConfiguration)
 class DetectedActivityStillEvent
 
 class DetectedActivityMovingEvent
+
+class PositionIntervalChangedEvent(val positionInterval : Int)
