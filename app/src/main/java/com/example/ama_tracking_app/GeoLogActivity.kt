@@ -69,7 +69,14 @@ class GeoLogActivity : BaseActivity() {
         }
 
         viewModel.getGeoLogsLiveData()
-            .observe(this, Observer { geoLogs -> viewModel.recyclerViewAdapter.setData(geoLogs) })
+            .observe(
+                this,
+                Observer { geoLogs ->
+                    run {
+                        viewModel.recyclerViewAdapter.setData(geoLogs)
+                        log_recycler_view.scrollToPosition(geoLogs.size - 1)
+                    }
+                })
     }
 
     @Subscribe
@@ -79,7 +86,7 @@ class GeoLogActivity : BaseActivity() {
         GeofenceController.startGeofenceService()
     }
 
-    fun toggleGeoLocationService(view : View) {
+    fun toggleGeoLocationService(view: View) {
         val result = GeofenceController.toggleGeofenceService()
         if (result) {
             toggleGeofenceServiceButton.text = "STOP"
@@ -92,8 +99,7 @@ class GeoLogActivity : BaseActivity() {
         val dialogBuilder = AlertDialog.Builder(this).apply {
             title = "Clear logs"
             setMessage("Are you sure you want to clear logs?")
-            setPositiveButton("Yes") {
-                dialog, which ->
+            setPositiveButton("Yes") { dialog, which ->
                 viewModel.clearLogs()
             }
             setNegativeButton("No") { dialog, which -> }
@@ -130,13 +136,22 @@ class GeoLogActivity : BaseActivity() {
 
         // You can set desired events with their corresponding state
         var detectedActivity = DetectedActivity.STILL
-        if(GeofenceController.currentActivityType == DetectedActivity.STILL) detectedActivity = DetectedActivity.ON_BICYCLE
-        var transitionEvent = ActivityTransitionEvent(detectedActivity, ActivityTransition.ACTIVITY_TRANSITION_ENTER, SystemClock.elapsedRealtimeNanos())
+        if (GeofenceController.currentActivityType == DetectedActivity.STILL) detectedActivity =
+            DetectedActivity.ON_BICYCLE
+        var transitionEvent = ActivityTransitionEvent(
+            detectedActivity,
+            ActivityTransition.ACTIVITY_TRANSITION_ENTER,
+            SystemClock.elapsedRealtimeNanos()
+        )
 //        GeofenceController.setActivityType(detectedActivity)
 
         events.add(transitionEvent)
         var result = ActivityTransitionResult(events)
-        SafeParcelableSerializer.serializeToIntentExtra(result, intent, "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT")
+        SafeParcelableSerializer.serializeToIntentExtra(
+            result,
+            intent,
+            "com.google.android.location.internal.EXTRA_ACTIVITY_TRANSITION_RESULT"
+        )
 //        activity?.sendBroadcast(intent)
         this.sendBroadcast(intent)
 
